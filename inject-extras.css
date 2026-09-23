@@ -1,0 +1,383 @@
+/* ===== FLOATING VIDEO WIDGET ===== */
+.fv-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.fv-bubble {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #25d366;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  background: #000;
+}
+
+.fv-bubble video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fv-bubble .fv-play-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.25);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.fv-bubble:hover .fv-play-icon {
+  opacity: 1;
+}
+
+.fv-close {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  font-size: 12px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.fv-expanded {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10000;
+  width: 280px;
+  max-height: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  background: #000;
+  display: none;
+}
+
+.fv-expanded.show {
+  display: block;
+}
+
+.fv-expanded video {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+.fv-expanded .fv-exp-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+}
+
+@media (max-width: 480px) {
+  .fv-bubble { width: 75px; height: 75px; }
+  .fv-expanded { width: 240px; max-height: 420px; }
+}
+
+/* ===== REVIEWS SECTION ===== */
+.rv-section {
+  background: #0c0c10;
+  padding: 60px 16px 80px;
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: #fff;
+}
+
+.rv-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.rv-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  font-weight: 400;
+  color: #fff;
+  line-height: 1;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.rv-stars {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 8px 0;
+}
+
+.rv-star {
+  color: #f5a623;
+  font-size: 20px;
+}
+
+.rv-count {
+  font-size: 14px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.rv-bar-chart {
+  max-width: 320px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rv-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.rv-bar-label {
+  width: 16px;
+  text-align: right;
+  color: #999;
+}
+
+.rv-bar-star { color: #f5a623; font-size: 14px; }
+
+.rv-bar-track {
+  flex: 1;
+  height: 8px;
+  background: #1a1a1f;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.rv-bar-fill {
+  height: 100%;
+  background: #f5a623;
+  border-radius: 4px;
+}
+
+.rv-bar-num {
+  width: 28px;
+  text-align: right;
+  color: #999;
+  font-size: 13px;
+}
+
+/* Grid */
+.rv-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .rv-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.rv-card {
+  background: #17171c;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.rv-card-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.rv-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rv-card-dots {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+}
+
+.rv-card-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+}
+
+.rv-card-dot.active {
+  background: #fff;
+}
+
+.rv-card-body {
+  padding: 12px;
+}
+
+.rv-card-stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.rv-card-star { color: #f5a623; font-size: 16px; }
+
+.rv-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rv-verified {
+  width: 16px;
+  height: 16px;
+  background: #4a90d9;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rv-verified svg {
+  width: 10px;
+  height: 10px;
+  fill: #fff;
+}
+
+.rv-card-text {
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.4;
+  margin-top: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rv-card-more {
+  color: #888;
+  font-size: 13px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.rv-load-more {
+  display: block;
+  margin: 32px auto 0;
+  padding: 12px 32px;
+  background: transparent;
+  color: #f5a623;
+  border: 1px solid #f5a623;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  transition: background 0.2s;
+}
+
+.rv-load-more:hover {
+  background: rgba(245, 166, 35, 0.1);
+}
+
+.rv-filter-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.rv-filter-btn {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid #333;
+  background: transparent;
+  color: #999;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+}
+
+.rv-filter-btn.active {
+  border-color: #f5a623;
+  color: #f5a623;
+}
+
+/* ===== PRODUCT CAROUSEL ===== */
+.pp-carousel {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pp-main-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.pp-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.pp-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transition: background 0.2s;
+}
+
+.pp-dot.active {
+  background: #f5a623;
+}
