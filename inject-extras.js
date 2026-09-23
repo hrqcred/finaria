@@ -1,6 +1,7 @@
 (function() {
   'use strict';
 
+
   var REVIEWS = [
     {
       name: "Leila Carvalho",
@@ -147,7 +148,7 @@
 
   function injectReviews() {
     var relatosSection = document.getElementById('relatos');
-    if (!relatosSection) return;
+    if (relatosSection) relatosSection.style.display = 'none';
 
     var section = document.createElement('section');
     section.className = 'rv-section';
@@ -155,7 +156,7 @@
 
     section.innerHTML =
       '<div class="rv-header">' +
-        '<h2 class="rv-title">Quem já usa</h2>' +
+        '<h2 class="rv-title">Quem já provou</h2>' +
         '<div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>' +
         '<div class="rv-count">391 avaliações</div>' +
       '</div>';
@@ -179,7 +180,12 @@
     });
     section.appendChild(loadMore);
 
-    relatosSection.parentElement.replaceChild(section, relatosSection);
+    var protocoloSection = document.getElementById('protocolo');
+    if (protocoloSection && protocoloSection.nextElementSibling) {
+      protocoloSection.parentElement.insertBefore(section, protocoloSection.nextElementSibling);
+    } else {
+      document.querySelector('main').appendChild(section);
+    }
   }
 
   function injectFloatingVideo() {
@@ -282,7 +288,31 @@
     allImgs.forEach(function(_, i) {
       var dot = document.createElement('span');
       dot.className = 'pp-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', function(e) {
+        e.stopPropagation();
+        goTo(i);
+      });
       dotsRow.appendChild(dot);
+    });
+
+    var prevBtn = document.createElement('button');
+    prevBtn.className = 'pp-arrow pp-arrow-left';
+    prevBtn.innerHTML = '‹';
+    prevBtn.setAttribute('aria-label', 'Foto anterior');
+    prevBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (currentIdx > 0) goTo(currentIdx - 1);
+      else goTo(allImgs.length - 1);
+    });
+
+    var nextBtn = document.createElement('button');
+    nextBtn.className = 'pp-arrow pp-arrow-right';
+    nextBtn.innerHTML = '›';
+    nextBtn.setAttribute('aria-label', 'Próxima foto');
+    nextBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (currentIdx < allImgs.length - 1) goTo(currentIdx + 1);
+      else goTo(0);
     });
 
     function goTo(idx) {
@@ -292,30 +322,61 @@
       dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
     }
 
-    var startX = 0;
-    wrap.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, {passive: true});
-    wrap.addEventListener('touchend', function(e) {
-      var diff = startX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) {
-        if (diff > 0 && currentIdx < allImgs.length - 1) goTo(currentIdx + 1);
-        else if (diff < 0 && currentIdx > 0) goTo(currentIdx - 1);
-      }
-    }, {passive: true});
-
-    wrap.addEventListener('click', function() {
-      goTo((currentIdx + 1) % allImgs.length);
-    });
-
     wrap.appendChild(mainImg);
+    wrap.appendChild(prevBtn);
+    wrap.appendChild(nextBtn);
     wrap.appendChild(dotsRow);
 
     container.innerHTML = '';
     container.appendChild(wrap);
   }
 
+  function reorderCheckoutFields() {
+    var style = document.createElement('style');
+    style.textContent =
+      '.space-y-4 { display: flex !important; flex-direction: column !important; }' +
+      '.space-y-4 > * { margin-top: 16px !important; }' +
+      '.space-y-4 > *:first-child { margin-top: 0 !important; }' +
+      '.space-y-4 > .grid { display: contents !important; }' +
+      '.space-y-4 > .grid > label { margin-top: 16px !important; }';
+    document.head.appendChild(style);
+
+    var observer = new MutationObserver(function() {
+      var parent = document.querySelector('.space-y-4');
+      if (!parent) return;
+
+      var children = parent.children;
+      for (var i = 0; i < children.length; i++) {
+        var el = children[i];
+        var text = el.textContent.toLowerCase();
+
+        if (el.tagName === 'LABEL') {
+          if (text.indexOf('nome') !== -1) el.style.order = '1';
+          else if (text.indexOf('e-mail') !== -1 || text.indexOf('email') !== -1) el.style.order = '3';
+          else if (text.indexOf('cpf') !== -1) el.style.order = '2';
+          else if (text.indexOf('celular') !== -1 || text.indexOf('whatsapp') !== -1) el.style.order = '4';
+        } else if (el.classList.contains('grid')) {
+          var labels = el.querySelectorAll('label');
+          for (var j = 0; j < labels.length; j++) {
+            var lt = labels[j].textContent.toLowerCase();
+            if (lt.indexOf('cpf') !== -1) labels[j].style.order = '2';
+            else if (lt.indexOf('celular') !== -1 || lt.indexOf('whatsapp') !== -1) labels[j].style.order = '4';
+          }
+        }
+      }
+
+      var hasOrder = parent.querySelector('[style*="order"]');
+      if (hasOrder) observer.disconnect();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(function() { observer.disconnect(); }, 20000);
+  }
+
   waitForApp(function() {
     injectReviews();
     injectFloatingVideo();
     injectProductCarousel();
+    reorderCheckoutFields();
   });
 })();

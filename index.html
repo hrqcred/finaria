@@ -20,6 +20,49 @@
 
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
+  <script>
+    // Captura UTM params e salva no sessionStorage
+    (function(){
+      var p=new URLSearchParams(window.location.search);
+      var keys=['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+      var has=false;
+      keys.forEach(function(k){if(p.get(k)){has=true;}});
+      if(has){
+        var u={};
+        keys.forEach(function(k){var v=p.get(k);if(v)u[k]=v;});
+        try{sessionStorage.setItem('utm_data',JSON.stringify(u));}catch(e){}
+      }
+    })();
+
+    // Intercepta chamadas Supabase → API routes SyncPay
+    (function(){
+      var SH='klxgpzzfnyntnnwbqbvz.supabase.co',FP='/functions/v1/';
+      var R={'create-order':'/api/create-order','get-order':'/api/get-order','generate-pix':'/api/generate-pix'};
+      var S=['meta-capi','track-order','admin-bootstrap','admin-metrics','admin-gateway-stats','create-postsell'];
+      var oF=window.fetch;
+      window.fetch=async function(i,n){
+        var u=typeof i==='string'?i:(i&&i.url?i.url:'');
+        if(u.indexOf(SH)===-1||u.indexOf(FP)===-1)return oF.apply(this,arguments);
+        var f=u.split(FP)[1];if(!f)return oF.apply(this,arguments);
+        f=f.split('?')[0];
+        if(S.indexOf(f)!==-1)return new Response('{}',{status:200,headers:{'Content-Type':'application/json'}});
+        var r=R[f];
+        if(!r)return new Response('{"error":"not found"}',{status:404,headers:{'Content-Type':'application/json'}});
+        var b=null;
+        if(n&&n.body){try{b=typeof n.body==='string'?n.body:JSON.stringify(n.body)}catch(e){b=n.body}}
+        // Injeta UTM no create-order
+        if(f==='create-order'){
+          try{
+            var body=b?JSON.parse(b):{};
+            var utm=sessionStorage.getItem('utm_data');
+            if(utm){var ud=JSON.parse(utm);Object.keys(ud).forEach(function(k){body[k]=ud[k];});}
+            b=JSON.stringify(body);
+          }catch(e){}
+        }
+        return oF.call(this,r,{method:'POST',headers:{'Content-Type':'application/json'},body:b});
+      };
+    })();
+  </script>
   <script type="module" src="/assets/index-BEYjJ2mT.js"></script>
   <link rel="stylesheet" href="/assets/index-C3pbADRx.css">
   <link rel="stylesheet" href="/inject-extras.css">

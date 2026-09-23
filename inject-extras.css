@@ -351,7 +351,6 @@
 .pp-carousel {
   position: relative;
   width: 100%;
-  cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -361,6 +360,38 @@
   height: auto;
   display: block;
   border-radius: 8px;
+  transition: opacity 0.2s;
+}
+
+.pp-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s;
+}
+
+.pp-arrow:hover { background: rgba(0,0,0,0.75); }
+.pp-arrow-left { left: 8px; }
+.pp-arrow-right { right: 8px; }
+
+@media (max-width: 480px) {
+  .pp-arrow { width: 32px; height: 32px; font-size: 20px; }
+  .pp-arrow-left { left: 6px; }
+  .pp-arrow-right { right: 6px; }
 }
 
 .pp-dots {
@@ -376,7 +407,10 @@
   border-radius: 50%;
   background: rgba(255,255,255,0.3);
   transition: background 0.2s;
+  cursor: pointer;
 }
+
+.pp-dot:hover { background: rgba(255,255,255,0.6); }
 
 .pp-dot.active {
   background: #f5a623;

@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Fina Maria</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #07070a;
+      --surface: #0f0f14;
+      --surface-2: #16161d;
+      --surface-3: #1e1e28;
+      --border: #2a2a36;
+      --border-hover: #3a3a4a;
+      --text: #e8e6e3;
+      --text-muted: #8a8a9a;
+      --text-dim: #5a5a6a;
+      --gold: #c9a84c;
+      --gold-dim: rgba(201,168,76,0.15);
+      --gold-glow: rgba(201,168,76,0.08);
+      --green: #34d399;
+      --green-dim: rgba(52,211,153,0.12);
+      --yellow: #fbbf24;
+      --yellow-dim: rgba(251,191,36,0.12);
+      --red: #f87171;
+      --red-dim: rgba(248,113,113,0.12);
+      --blue: #60a5fa;
+      --blue-dim: rgba(96,165,250,0.12);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* LOGIN */
+    .login-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    .login-logo {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .login-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      color: var(--text);
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 16px;
+    }
+
+    .login-input:focus { border-color: var(--gold); }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--gold);
+      color: #0a0a0a;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s;
+    }
+
+    .login-btn:hover { opacity: 0.9; }
+
+    .login-error {
+      color: var(--red);
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* LAYOUT */
+    .app { display: none; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-brand {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-btn {
+      padding: 8px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .topbar-btn:hover { border-color: var(--border-hover); color: var(--text); }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+      .container { padding: 32px 24px; }
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .stat-card:hover { border-color: var(--border-hover); }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .stat-value.gold { color: var(--gold); }
+    .stat-value.green { color: var(--green); }
+    .stat-value.yellow { color: var(--yellow); }
+    .stat-value.red { color: var(--red); }
+
+    .stat-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 6px;
+    }
+
+    /* FILTERS */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus { border-color: var(--gold); }
+    .search-input::placeholder { color: var(--text-dim); }
+
+    .filter-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+    }
+
+    .filter-tab {
+      padding: 7px 14px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .filter-tab:hover { color: var(--text); }
+    .filter-tab.active { background: var(--surface-3); color: var(--text); }
+
+    /* TABLE */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .table-scroll { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gold-glow); }
+
+    td {
+      padding: 14px 16px;
+      white-space: nowrap;
+    }
+
+    .td-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .td-sub {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .td-mono {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .badge-paid { background: var(--green-dim); color: var(--green); }
+    .badge-paid .badge-dot { background: var(--green); }
+
+    .badge-pending { background: var(--yellow-dim); color: var(--yellow); }
+    .badge-pending .badge-dot { background: var(--yellow); animation: pulse 2s infinite; }
+
+    .badge-failed { background: var(--red-dim); color: var(--red); }
+    .badge-failed .badge-dot { background: var(--red); }
+
+    .badge-unknown { background: var(--blue-dim); color: var(--blue); }
+    .badge-unknown .badge-dot { background: var(--blue); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      animation: slideUp 0.25s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: var(--surface-2);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover { background: var(--surface-3); color: var(--text); }
+
+    .modal-body { padding: 24px; }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-row:last-child { border-bottom: none; }
+
+    .detail-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+    }
+
+    .detail-value {
+      font-size: 14px;
+      color: var(--text);
+      text-align: right;
+      word-break: break-all;
+      max-width: 60%;
+    }
+
+    .modal-actions {
+      padding: 0 24px 24px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #0a0a0a;
+    }
+
+    .btn-gold:hover { opacity: 0.9; }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--text-muted);
+    }
+
+    .btn-outline:hover { border-color: var(--border-hover); color: var(--text); }
+
+    /* PIX CODE */
+    .pix-code-box {
+      margin-top: 12px;
+      padding: 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      word-break: break-all;
+      line-height: 1.5;
+      max-height: 80px;
+      overflow-y: auto;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dim);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    .empty-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    /* LOADING */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-full {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 200;
+      animation: fadeInUp 0.3s ease-out;
+      display: none;
+    }
+
+    .toast.show { display: block; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* TABS NAV */
+    .tabs-nav {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-nav-btn {
+      padding: 12px 20px;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab-nav-btn:hover { color: var(--text); }
+    .tab-nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* UTM SECTION */
+    .utm-generator {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .utm-generator h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .utm-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .utm-form { grid-template-columns: 1fr; }
+    }
+
+    .utm-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .utm-field input, .utm-field select {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .utm-field input:focus, .utm-field select:focus { border-color: var(--gold); }
+
+    .utm-field input::placeholder { color: var(--text-dim); }
+
+    .utm-result {
+      grid-column: 1 / -1;
+      margin-top: 8px;
+    }
+
+    .utm-link-box {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .utm-link-input {
+      flex: 1;
+      padding: 10px 12px;
+      background: var(--surface-3);
+      border: 1px solid var(--gold-dim);
+      border-radius: var(--radius-sm);
+      color: var(--gold);
+      font-size: 12px;
+      font-family: 'SF Mono', monospace;
+      outline: none;
+      word-break: break-all;
+    }
+
+    .utm-copy-btn {
+      padding: 10px 16px;
+      background: var(--gold);
+      color: #0a0a0a;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+
+    .utm-copy-btn:hover { opacity: 0.9; }
+
+    /* UTM STATS TABLE */
+    .utm-stats-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .utm-stats-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .utm-stats-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .conv-rate {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .conv-high { background: var(--green-dim); color: var(--green); }
+    .conv-mid { background: var(--yellow-dim); color: var(--yellow); }
+    .conv-low { background: var(--red-dim); color: var(--red); }
+
+    .utm-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .topbar { padding: 12px 16px; }
+      .stat-value { font-size: 22px; }
+      .stat-card { padding: 16px; }
+      .filter-tabs { overflow-x: auto; }
+      td, thead th { padding: 10px 12px; }
+      .hide-mobile { display: none; }
+      .tabs-nav { overflow-x: auto; }
+      .tab-nav-btn { padding: 10px 14px; font-size: 12px; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div class="login-wrap" id="loginWrap">
+    <div class="login-card">
+      <div class="login-logo">Fina Maria</div>
+      <h1 class="login-title">Painel Admin</h1>
+      <input type="password" class="login-input" id="passInput" placeholder="Senha de acesso" autofocus>
+      <button class="login-btn" id="loginBtn">Entrar</button>
+      <div class="login-error" id="loginError">Senha incorreta</div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div class="app" id="app">
+    <header class="topbar">
+      <div class="topbar-brand">Fina Maria · Admin</div>
+      <div class="topbar-right">
+        <button class="topbar-btn" id="refreshBtn">Atualizar</button>
+        <button class="topbar-btn" id="logoutBtn">Sair</button>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- STATS -->
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="stat-label">Total pedidos</div>
+          <div class="stat-value gold" id="statTotal">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pagos</div>
+          <div class="stat-value green" id="statPaid">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pendentes</div>
+          <div class="stat-value yellow" id="statPending">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Receita</div>
+          <div class="stat-value gold" id="statRevenue">R$ 0</div>
+          <div class="stat-sub" id="statRevenueSub">pagamentos confirmados</div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs-nav">
+        <button class="tab-nav-btn active" data-tab="orders">Pedidos</button>
+        <button class="tab-nav-btn" data-tab="utm">UTM / Criativos</button>
+      </div>
+
+      <!-- TAB: PEDIDOS -->
+      <div class="tab-panel active" id="tabOrders">
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+          <input type="text" class="search-input" id="searchInput" placeholder="Buscar por nome, CPF ou email...">
+          <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">Todos</button>
+            <button class="filter-tab" data-filter="paid">Pagos</button>
+            <button class="filter-tab" data-filter="pending">Pendentes</button>
+            <button class="filter-tab" data-filter="failed">Falhos</button>
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                  <th class="hide-mobile">Criativo</th>
+                  <th class="hide-mobile">Data</th>
+                </tr>
+              </thead>
+              <tbody id="ordersBody"></tbody>
+            </table>
+          </div>
+          <div class="loading-full" id="loadingState">
+            <span class="spinner"></span> Carregando pedidos...
+          </div>
+          <div class="empty-state" id="emptyState" style="display:none">
+            <div class="empty-icon">📦</div>
+            <div class="empty-title">Nenhum pedido encontrado</div>
+            <div>Os pedidos aparecerão aqui quando começarem a chegar.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: UTM -->
+      <div class="tab-panel" id="tabUtm">
+        <!-- LINK DINAMICO FACEBOOK -->
+        <div class="utm-generator" style="border-color: var(--gold-dim);">
+          <h3 style="display:flex;align-items:center;gap:8px">Link Dinâmico Facebook/Meta <span style="font-size:11px;font-weight:500;color:var(--green);background:var(--green-dim);padding:2px 8px;border-radius:4px">Recomendado</span></h3>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.5">Cole este link no nível do <strong>conjunto de anúncios</strong>. O Facebook substitui <code style="color:var(--gold);background:var(--surface-3);padding:1px 4px;border-radius:3px">{{ad.name}}</code> pelo nome de cada criativo automaticamente — sem editar um por um.</p>
+          <div class="utm-link-box">
+            <input type="text" class="utm-link-input" id="utmDynamicLink" readonly>
+            <button class="utm-copy-btn" id="utmDynamicCopy">Copiar</button>
+          </div>
+        </div>
+
+        <!-- GERADOR MANUAL -->
+        <div class="utm-generator">
+          <h3>Link Manual (outros canais)</h3>
+          <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px">Para WhatsApp, email, orgânico ou quando quiser um link específico.</p>
+          <div class="utm-form">
+            <div class="utm-field">
+              <label>Origem (utm_source)</label>
+              <select id="utmSource">
+                <option value="facebook">Facebook Ads</option>
+                <option value="instagram">Instagram</option>
+                <option value="google">Google Ads</option>
+                <option value="tiktok">TikTok Ads</option>
+                <option value="kwai">Kwai Ads</option>
+                <option value="youtube">YouTube</option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="email">Email</option>
+                <option value="organic">Orgânico</option>
+              </select>
+            </div>
+            <div class="utm-field">
+              <label>Mídia (utm_medium)</label>
+              <select id="utmMedium">
+                <option value="cpc">CPC (Pago)</option>
+                <option value="cpm">CPM</option>
+                <option value="social">Social</option>
+                <option value="stories">Stories</option>
+                <option value="reels">Reels</option>
+                <option value="email">Email</option>
+                <option value="referral">Indicação</option>
+              </select>
+            </div>
+            <div class="utm-field">
+              <label>Campanha (utm_campaign)</label>
+              <input type="text" id="utmCampaign" placeholder="ex: lancamento-setembro">
+            </div>
+            <div class="utm-field">
+              <label>Criativo (utm_content)</label>
+              <input type="text" id="utmContent" placeholder="ex: video-depoimento-01">
+            </div>
+            <div class="utm-result">
+              <div class="utm-link-box">
+                <input type="text" class="utm-link-input" id="utmLinkOutput" readonly placeholder="Preencha campanha ou criativo...">
+                <button class="utm-copy-btn" id="utmCopyBtn">Copiar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- METRICAS POR CRIATIVO -->
+        <div class="utm-stats-section">
+          <div class="utm-stats-header">
+            <h3>Conversões por Criativo</h3>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Origem</th>
+                  <th>Campanha</th>
+                  <th>Criativo</th>
+                  <th>Checkouts</th>
+                  <th>Vendas</th>
+                  <th>Conversão</th>
+                  <th>Receita</th>
+                </tr>
+              </thead>
+              <tbody id="utmStatsBody"></tbody>
+            </table>
+          </div>
+          <div class="utm-empty" id="utmEmpty" style="display:none">
+            Nenhuma conversão com UTM registrada ainda.<br>
+            Crie links acima e use nos seus criativos.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Detalhes do pedido</div>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_BASE = '';
+    const SITE_URL = 'https://oleo-de-argan.vercel.app';
+    let PASS = '';
+    let orders = [];
+    let utmStats = [];
+    let currentFilter = 'all';
+
+    const $ = id => document.getElementById(id);
+
+    function formatCurrency(val) {
+      const n = parseFloat(val) || 0;
+      return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '-';
+      const d = new Date(iso);
+      return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function formatCPF(cpf) {
+      if (!cpf || cpf.length !== 11) return cpf || '-';
+      return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+
+    function statusBadge(status) {
+      const map = {
+        paid: ['Pago', 'paid'],
+        pending: ['Pendente', 'pending'],
+        failed: ['Falhou', 'failed'],
+        refunded: ['Estornado', 'failed'],
+      };
+      const [label, cls] = map[status] || [status || 'Desconhecido', 'unknown'];
+      return `<span class="badge badge-${cls}"><span class="badge-dot"></span>${label}</span>`;
+    }
+
+    function toast(msg) {
+      const el = $('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    async function apiFetch(path, opts = {}) {
+      const res = await fetch(API_BASE + path, {
+        ...opts,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${PASS}`,
+          ...(opts.headers || {}),
+        },
+      });
+      return res.json();
+    }
+
+    // LOGIN
+    async function login() {
+      PASS = $('passInput').value;
+      if (!PASS) return;
+
+      try {
+        const data = await apiFetch('/api/orders');
+        if (data.error === 'Não autorizado') {
+          $('loginError').style.display = 'block';
+          return;
+        }
+        try { sessionStorage.setItem('admin_pass', PASS); } catch {}
+        $('loginWrap').style.display = 'none';
+        $('app').style.display = 'block';
+        orders = data.orders || [];
+        utmStats = data.utm_stats || [];
+        renderStats(data.stats);
+        renderOrders();
+        renderUtmStats();
+      } catch (e) {
+        $('loginError').style.display = 'block';
+      }
+    }
+
+    $('loginBtn').addEventListener('click', login);
+    $('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+
+    // AUTO LOGIN
+    try {
+      const saved = sessionStorage.getItem('admin_pass');
+      if (saved) {
+        $('passInput').value = saved;
+        login();
+      }
+    } catch {}
+
+    // STATS
+    function renderStats(stats) {
+      if (!stats) return;
+      $('statTotal').textContent = stats.total;
+      $('statPaid').textContent = stats.paid;
+      $('statPending').textContent = stats.pending;
+      $('statRevenue').textContent = formatCurrency(stats.revenue);
+    }
+
+    // ORDERS TABLE
+    function renderOrders() {
+      const search = $('searchInput').value.toLowerCase();
+      let filtered = orders;
+
+      if (currentFilter !== 'all') {
+        filtered = filtered.filter(o => {
+          if (currentFilter === 'failed') return o.status === 'failed' || o.status === 'refunded';
+          return o.status === currentFilter;
+        });
+      }
+
+      if (search) {
+        filtered = filtered.filter(o =>
+          (o.customer_name || '').toLowerCase().includes(search) ||
+          (o.customer_cpf || '').includes(search) ||
+          (o.customer_email || '').toLowerCase().includes(search) ||
+          (o.id || '').toLowerCase().includes(search)
+        );
+      }
+
+      $('loadingState').style.display = 'none';
+
+      if (filtered.length === 0) {
+        $('emptyState').style.display = 'block';
+        $('ordersBody').innerHTML = '';
+        return;
+      }
+
+      $('emptyState').style.display = 'none';
+      $('ordersBody').innerHTML = filtered.map(o => {
+        const utmTag = o.utm_content || o.utm_campaign || o.utm_source || '';
+        return `
+        <tr data-id="${o.id}">
+          <td>
+            <div class="td-name">${o.customer_name || 'Sem nome'}</div>
+            <div class="td-sub">${o.customer_email || formatCPF(o.customer_cpf)}</div>
+          </td>
+          <td class="td-mono">${formatCurrency(o.amount)}</td>
+          <td>${statusBadge(o.status)}</td>
+          <td class="hide-mobile"><span class="td-mono" style="font-size:11px;color:${utmTag ? 'var(--gold)' : 'var(--text-dim)'}">${utmTag || 'direto'}</span></td>
+          <td class="hide-mobile">${formatDate(o.created_at)}</td>
+        </tr>`;
+      }).join('');
+
+      $('ordersBody').querySelectorAll('tr').forEach(tr => {
+        tr.addEventListener('click', () => openDetail(tr.dataset.id));
+      });
+    }
+
+    // FILTERS
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = tab.dataset.filter;
+        renderOrders();
+      });
+    });
+
+    $('searchInput').addEventListener('input', renderOrders);
+
+    // DETAIL MODAL
+    function openDetail(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o) return;
+
+      $('modalBody').innerHTML = `
+        <div class="detail-row">
+          <span class="detail-label">Status</span>
+          <span class="detail-value">${statusBadge(o.status)}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Cliente</span>
+          <span class="detail-value">${o.customer_name || '-'}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">CPF</span>
+          <span class="detail-value">${formatCPF(o.customer_cpf)}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Email</span>
+          <span class="detail-value">${o.customer_email || '-'}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Telefone</span>
+          <span class="detail-value">${o.customer_phone || '-'}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Valor</span>
+          <span class="detail-value" style="color:var(--gold);font-weight:700">${formatCurrency(o.amount)}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Frete</span>
+          <span class="detail-value">${o.shipping_method || '-'}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Criado em</span>
+          <span class="detail-value">${formatDate(o.created_at)}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Atualizado</span>
+          <span class="detail-value">${formatDate(o.updated_at)}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">ID Transação</span>
+          <span class="detail-value td-mono" style="font-size:11px">${o.id}</span>
+        </div>
+        ${(o.utm_source || o.utm_campaign || o.utm_content) ? `
+        <div class="detail-row">
+          <span class="detail-label">UTM</span>
+          <span class="detail-value" style="font-size:12px;color:var(--gold)">
+            ${[o.utm_source, o.utm_medium, o.utm_campaign, o.utm_content].filter(Boolean).join(' / ')}
+          </span>
+        </div>` : ''}
+        ${o.pix_code ? `
+        <div class="detail-row" style="flex-direction:column;gap:8px">
+          <span class="detail-label">Código PIX</span>
+          <div class="pix-code-box">${o.pix_code}</div>
+        </div>` : ''}
+      `;
+
+      $('modalActions').innerHTML = `
+        ${o.status === 'pending' ? `<button class="btn btn-gold" onclick="checkPayment('${o.id}')">Verificar pagamento</button>` : ''}
+        ${o.pix_code ? `<button class="btn btn-outline" onclick="copyPix('${o.id}')">Copiar PIX</button>` : ''}
+      `;
+
+      $('modalOverlay').classList.add('open');
+    }
+
+    $('modalClose').addEventListener('click', () => $('modalOverlay').classList.remove('open'));
+    $('modalOverlay').addEventListener('click', e => {
+      if (e.target === $('modalOverlay')) $('modalOverlay').classList.remove('open');
+    });
+
+    // CHECK PAYMENT
+    async function checkPayment(id) {
+      const btn = $('modalActions').querySelector('.btn-gold');
+      if (btn) { btn.innerHTML = '<span class="spinner"></span> Verificando...'; btn.disabled = true; }
+
+      const data = await apiFetch('/api/orders', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'check_status', identifier: id }),
+      });
+
+      if (data.paid) {
+        const o = orders.find(x => x.id === id);
+        if (o) { o.status = 'paid'; o.updated_at = new Date().toISOString(); }
+        toast('Pagamento confirmado!');
+        renderOrders();
+        $('modalOverlay').classList.remove('open');
+        await refreshOrders();
+      } else {
+        toast(`Status: ${data.status || 'pendente'}`);
+        if (btn) { btn.innerHTML = 'Verificar pagamento'; btn.disabled = false; }
+      }
+    }
+
+    // COPY PIX
+    function copyPix(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o || !o.pix_code) return;
+      navigator.clipboard.writeText(o.pix_code).then(() => toast('PIX copiado!')).catch(() => {});
+    }
+
+    // REFRESH
+    async function refreshOrders() {
+      const data = await apiFetch('/api/orders');
+      if (!data.error) {
+        orders = data.orders || [];
+        utmStats = data.utm_stats || [];
+        renderStats(data.stats);
+        renderOrders();
+        renderUtmStats();
+      }
+    }
+
+    $('refreshBtn').addEventListener('click', async () => {
+      $('refreshBtn').textContent = 'Atualizando...';
+      await refreshOrders();
+      $('refreshBtn').textContent = 'Atualizar';
+      toast('Dados atualizados');
+    });
+
+    // AUTO REFRESH
+    setInterval(refreshOrders, 30000);
+
+    // TABS
+    document.querySelectorAll('.tab-nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        $('tab' + btn.dataset.tab.charAt(0).toUpperCase() + btn.dataset.tab.slice(1)).classList.add('active');
+      });
+    });
+
+    // DYNAMIC FACEBOOK LINK
+    const dynamicLink = SITE_URL + '?utm_source=facebook&utm_medium=cpc&utm_campaign={{campaign.name}}&utm_content={{ad.name}}';
+    $('utmDynamicLink').value = dynamicLink;
+    $('utmDynamicCopy').addEventListener('click', () => {
+      navigator.clipboard.writeText(dynamicLink).then(() => toast('Link dinâmico copiado!')).catch(() => {});
+    });
+
+    // UTM LINK GENERATOR
+    function generateUtmLink() {
+      const source = $('utmSource').value;
+      const medium = $('utmMedium').value;
+      const campaign = $('utmCampaign').value.trim().replace(/\s+/g, '-').toLowerCase();
+      const content = $('utmContent').value.trim().replace(/\s+/g, '-').toLowerCase();
+
+      if (!campaign && !content) {
+        $('utmLinkOutput').value = 'Preencha campanha ou criativo...';
+        return;
+      }
+
+      const params = new URLSearchParams();
+      if (source && source !== 'custom') params.set('utm_source', source);
+      if (medium && medium !== 'custom') params.set('utm_medium', medium);
+      if (campaign) params.set('utm_campaign', campaign);
+      if (content) params.set('utm_content', content);
+
+      $('utmLinkOutput').value = SITE_URL + '?' + params.toString();
+    }
+
+    $('utmSource').addEventListener('change', generateUtmLink);
+    $('utmMedium').addEventListener('change', generateUtmLink);
+    $('utmCampaign').addEventListener('input', generateUtmLink);
+    $('utmContent').addEventListener('input', generateUtmLink);
+
+    $('utmCopyBtn').addEventListener('click', () => {
+      const link = $('utmLinkOutput').value;
+      if (!link || link.includes('Preencha')) return;
+      navigator.clipboard.writeText(link).then(() => toast('Link copiado!')).catch(() => {});
+    });
+
+    // UTM STATS TABLE
+    function renderUtmStats() {
+      if (!utmStats || utmStats.length === 0) {
+        $('utmStatsBody').innerHTML = '';
+        $('utmEmpty').style.display = 'block';
+        return;
+      }
+
+      $('utmEmpty').style.display = 'none';
+      $('utmStatsBody').innerHTML = utmStats.map(u => {
+        const rate = u.total > 0 ? Math.round((u.paid / u.total) * 100) : 0;
+        const rateClass = rate >= 50 ? 'conv-high' : rate >= 20 ? 'conv-mid' : 'conv-low';
+        return `
+          <tr>
+            <td><span style="color:var(--blue)">${u.utm_source || '-'}</span></td>
+            <td>${u.utm_campaign || '-'}</td>
+            <td style="color:var(--gold);font-weight:600">${u.utm_content || '-'}</td>
+            <td class="td-mono">${u.total}</td>
+            <td class="td-mono" style="color:var(--green)">${u.paid}</td>
+            <td><span class="conv-rate ${rateClass}">${rate}%</span></td>
+            <td class="td-mono" style="color:var(--gold)">${formatCurrency(u.revenue)}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    // LOGOUT
+    $('logoutBtn').addEventListener('click', () => {
+      try { sessionStorage.removeItem('admin_pass'); } catch {}
+      PASS = '';
+      $('app').style.display = 'none';
+      $('loginWrap').style.display = 'flex';
+      $('passInput').value = '';
+      $('loginError').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
